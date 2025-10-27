@@ -1,4 +1,11 @@
 Preserve Case Test Coverage
 ---------------------------
 
+- C++: ❌
+- Dart: ❌
+- Go: ❌
+- PHP: ❌
 - Python: ✅ (tests run in `tests/PythonTest.sh`)
+- TypeScript: ❌
+- JSON Schema: ❌
+- Rust: ❌

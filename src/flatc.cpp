@@ -769,7 +769,7 @@ FlatCOptions FlatCompiler::ParseFromCommandLineArguments(int argc,
           options.generators.push_back(code_generator_it->second);
           if (options.preserve_case) {
             static const std::set<std::string> preserve_case_supported = {
-              "dart", "cpp", "go", "php", "python", "ts", "jsonschema"
+              "dart", "cpp", "go", "php", "python", "ts", "jsonschema", "rust"
             };
             std::string matched_lang = arg;
             if (matched_lang.rfind("--", 0) == 0)
