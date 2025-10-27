@@ -8,4 +8,4 @@ Preserve Case Test Coverage
 - Python: ✅ (tests run in `tests/PythonTest.sh`)
 - TypeScript: ❌
 - JSON Schema: ❌
-- Rust: ❌
+- Rust: ✅ (preserve-case suites in `tests/rust_usage_test/tests/*_preserve_case.rs`)
