@@ -1,7 +1,7 @@
 Preserve Case Test Coverage
 ---------------------------
 
-- C++: ❌
+- C++: ✅ (covered by `tests/CppTest.sh`)
 - Dart: ❌
 - Go: ✅ (tests run in `tests/GoTest.sh`)
 - PHP: ❌
