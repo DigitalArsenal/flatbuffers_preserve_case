@@ -3,7 +3,7 @@ Preserve Case Test Coverage
 
 - C++: ❌
 - Dart: ❌
-- Go: ❌
+- Go: ✅ (tests run in `tests/GoTest.sh`)
 - PHP: ❌
 - Python: ✅ (tests run in `tests/PythonTest.sh`)
 - TypeScript: ❌
