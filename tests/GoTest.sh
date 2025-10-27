@@ -19,10 +19,15 @@ test_dir="$(pwd)"
 go_path=${test_dir}/go_gen
 go_src=${go_path}/src
 
+preserve_case_flag="--preserve-case"
+echo "Running Go tests with preserve-case enabled."
+
+rm -rf "${go_path}"
+
 # Emit Go code for the example schemas in the test dir:
-../flatc -g --gen-object-api -I include_test -o ${go_src} monster_test.fbs optional_scalars.fbs
-../flatc -g --gen-object-api -I include_test/sub -o ${go_src} include_test/order.fbs
-../flatc -g --gen-object-api -o ${go_src}/Pizza include_test/sub/no_namespace.fbs
+../flatc -g --gen-object-api ${preserve_case_flag} -I include_test -o ${go_src} monster_test.fbs optional_scalars.fbs
+../flatc -g --gen-object-api ${preserve_case_flag} -I include_test/sub -o ${go_src} include_test/order.fbs
+../flatc -g --gen-object-api ${preserve_case_flag} -o ${go_src}/Pizza include_test/sub/no_namespace.fbs
 
 # Go requires a particular layout of files in order to link multiple packages.
 # Copy flatbuffer Go files to their own package directories to compile the

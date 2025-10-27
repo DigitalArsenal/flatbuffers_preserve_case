@@ -1,12 +1,103 @@
 <?php
+
+chdir(__DIR__);
+
+function rrmdir($dir) {
+    if (!is_dir($dir)) {
+        return;
+    }
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
+    foreach ($iterator as $file) {
+        if ($file->isDir()) {
+            rmdir($file->getPathname());
+        } else {
+            unlink($file->getPathname());
+        }
+    }
+    rmdir($dir);
+}
+
+function find_flatc($rootDir) {
+    $candidates = array(
+        join(DIRECTORY_SEPARATOR, array($rootDir, "flatc")),
+        join(DIRECTORY_SEPARATOR, array($rootDir, "build_cmake", "flatc")),
+    );
+    foreach ($candidates as $candidate) {
+        if (is_file($candidate) && is_executable($candidate)) {
+            return $candidate;
+        }
+    }
+    throw new Exception("Could not locate the flatc executable.");
+}
+
+function generate_preserve_case_php($outputDir, $flatc) {
+    rrmdir($outputDir);
+    if (!mkdir($outputDir, 0777, true) && !is_dir($outputDir)) {
+        throw new Exception("Failed to create directory: {$outputDir}");
+    }
+
+    $schemas = array(
+        "monster_test.fbs",
+        "optional_scalars.fbs",
+        "nested_union_test.fbs",
+        "service_test.fbs",
+        "union_vector/union_vector.fbs",
+        "include_test/order.fbs",
+        "include_test/sub/no_namespace.fbs",
+    );
+
+    $args = array(
+        escapeshellarg($flatc),
+        "--php",
+        "--preserve-case",
+        "--gen-object-api",
+        "-I",
+        "include_test",
+        "-I",
+        "include_test/sub",
+        "-o",
+        escapeshellarg($outputDir),
+    );
+    foreach ($schemas as $schema) {
+        $args[] = escapeshellarg($schema);
+    }
+
+    $cmd = implode(" ", $args);
+    exec($cmd, $output, $result);
+    if ($result !== 0) {
+        throw new Exception("flatc failed to generate PHP code:\n" . implode("\n", $output));
+    }
+}
+
+$rootDir = dirname(__DIR__);
+$generatedRoot = join(DIRECTORY_SEPARATOR, array(__DIR__, "php_preserve_case"));
+$flatc = find_flatc($rootDir);
+generate_preserve_case_php($generatedRoot, $flatc);
+putenv('PHP_GENERATED_ROOT=' . $generatedRoot);
+
 // manual load for testing. please use PSR style autoloader when you use flatbuffers.
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "Constants.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "ByteBuffer.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "FlatbufferBuilder.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "Table.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "Struct.php"));
-foreach (glob(join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), "MyGame", "Example", "*.php"))) as $file) {
-    require $file;
+$phpLibDir = $rootDir;
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "Constants.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "ByteBuffer.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "FlatbufferBuilder.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "Table.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "Struct.php"));
+
+$generatedRoot = rtrim(getenv('PHP_GENERATED_ROOT'), DIRECTORY_SEPARATOR);
+$myGameRoot = join(DIRECTORY_SEPARATOR, array($generatedRoot, "MyGame"));
+if (!is_dir($myGameRoot)) {
+    throw new Exception("Could not find generated MyGame classes under {$myGameRoot}");
+}
+$iterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($myGameRoot, FilesystemIterator::SKIP_DOTS)
+);
+foreach ($iterator as $file) {
+    if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+        require $file;
+    }
 }
 
 function main()

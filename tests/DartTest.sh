@@ -17,23 +17,26 @@ set -euo pipefail
 
 pushd "$(dirname $0)" >/dev/null
 
+preserve_case_flag="--preserve-case"
+echo "Running Dart tests with preserve-case enabled."
+
 command -v dart >/dev/null 2>&1 || {
     echo >&2 "Dart tests require dart to be in path but it's not installed.  Aborting."
     exit 1
 }
 # output required files to the dart folder so that pub will be able to
 # distribute them and more people can more easily run the dart tests
-../flatc --dart --gen-object-api -I include_test -o ../dart/test monster_test.fbs
-../flatc --dart --gen-object-api -I include_test/sub -o ../dart/test include_test/include_test1.fbs
-../flatc --dart --gen-object-api -I include_test -o ../dart/test include_test/sub/include_test2.fbs
+../flatc --dart --gen-object-api ${preserve_case_flag} -I include_test -o ../dart/test monster_test.fbs
+../flatc --dart --gen-object-api ${preserve_case_flag} -I include_test/sub -o ../dart/test include_test/include_test1.fbs
+../flatc --dart --gen-object-api ${preserve_case_flag} -I include_test -o ../dart/test include_test/sub/include_test2.fbs
 
 cp monsterdata_test.mon ../dart/test
 cp monster_test.fbs ../dart/test
 
 cd ../dart
 
-../flatc --dart --gen-object-api -o ./test ./test/enums.fbs
-../flatc --dart --gen-object-api -o ./test ./test/bool_structs.fbs
+../flatc --dart --gen-object-api ${preserve_case_flag} -o ./test ./test/enums.fbs
+../flatc --dart --gen-object-api ${preserve_case_flag} -o ./test ./test/bool_structs.fbs
 
 # update packages
 dart pub get
