@@ -1,0 +1,4 @@
+Preserve Case Test Coverage
+---------------------------
+
+- Python: ✅ (tests run in `tests/PythonTest.sh`)
