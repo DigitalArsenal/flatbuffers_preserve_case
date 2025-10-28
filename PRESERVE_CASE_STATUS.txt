@@ -7,5 +7,6 @@ Preserve Case Test Coverage
 - PHP: ✅ (tests run in `tests/PHPTest.sh`)
 - Python: ✅ (tests run in `tests/PythonTest.sh`)
 - TypeScript: ✅ (default + preserve-case via `tests/TypeScriptTest.sh`)
+- Java: ✅ (default + preserve-case via `tests/JavaTest.sh`)
 - JSON Schema: ✅ (tests run in `tests/JsonSchemaTest.sh`)
 - Rust: ✅ (preserve-case suites in `tests/rust_usage_test/tests/*_preserve_case.rs`)
