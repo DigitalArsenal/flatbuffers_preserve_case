@@ -24,9 +24,9 @@
 #include "flatbuffers/base.h"
 #include "flatbuffers/buffer.h"
 #include "flatbuffers/idl.h"
+#include "flatbuffers/idlnames.h"
 #include "flatbuffers/reflection_generated.h"
 #include "flatbuffers/util.h"
-#include "flatbuffers/idlnames.h"
 
 namespace flatbuffers {
 
@@ -2436,7 +2436,7 @@ struct EnumValBuilder {
     temp = new EnumVal(ev_name, first ? 0 : enum_def.vals.vec.back()->value);
 
     RecordIdlName(&temp->name);
-    
+
     return temp;
   }
 
@@ -4247,16 +4247,16 @@ bool EnumDef::Deserialize(Parser& parser, const reflection::Enum* _enum) {
   for (uoffset_t i = 0; i < _enum->values()->size(); ++i) {
     auto val = new EnumVal();
     if (!val->Deserialize(parser, _enum->values()->Get(i))) {
-    delete val;
-    return false;
-  }
+      delete val;
+      return false;
+    }
 
-  RecordIdlName(&val->name);
+    RecordIdlName(&val->name);
 
-  if (vals.Add(val->name, val)) {
-    delete val;
-    return false;
-  }
+    if (vals.Add(val->name, val)) {
+      delete val;
+      return false;
+    }
   }
   is_union = _enum->is_union();
   if (!underlying_type.Deserialize(parser, _enum->underlying_type())) {

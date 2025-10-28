@@ -19,8 +19,8 @@
 #include "idl_gen_go.h"
 
 #include <algorithm>
-#include <cmath>
 #include <cctype>
+#include <cmath>
 #include <sstream>
 #include <string>
 
@@ -28,9 +28,9 @@
 #include "flatbuffers/code_generators.h"
 #include "flatbuffers/flatbuffers.h"
 #include "flatbuffers/idl.h"
+#include "flatbuffers/options.h"
 #include "flatbuffers/util.h"
 #include "idl_namer.h"
-#include "flatbuffers/options.h"
 
 #ifdef _WIN32
 #include <direct.h>
@@ -455,8 +455,8 @@ class GoGenerator : public BaseGenerator {
     code += "\n}\n";
 
     if (NeedsCompat(base_name, compat_name)) {
-      code += "\nfunc (rcv *" + namer_.Type(struct_def) + ") " +
-              compat_name + "() " + TypeName(field) + " {\n";
+      code += "\nfunc (rcv *" + namer_.Type(struct_def) + ") " + compat_name +
+              "() " + TypeName(field) + " {\n";
       code += "\treturn rcv." + base_name + "()\n";
       code += "}\n";
     }
@@ -835,8 +835,8 @@ class GoGenerator : public BaseGenerator {
 
     if (needs_compat) {
       code += "func " + namer_.Type(struct_def) + "Add" + compat_name +
-              "(builder *flatbuffers.Builder, " + field_var + " " +
-              param_type + ") {\n";
+              "(builder *flatbuffers.Builder, " + field_var + " " + param_type +
+              ") {\n";
       code += "\t" + namer_.Type(struct_def) + "Add" + base_name +
               "(builder, " + field_var + ")\n";
       code += "}\n";
@@ -1385,7 +1385,7 @@ class GoGenerator : public BaseGenerator {
                   "(builder, t." + field_field + ".Type)\n";
           code += "\t}\n";
         }
-          code += "\t" + struct_type + "Add" + field_fn + "(builder, " + offset +
+        code += "\t" + struct_type + "Add" + field_fn + "(builder, " + offset +
                 ")\n";
       }
     }
@@ -1573,8 +1573,7 @@ class GoGenerator : public BaseGenerator {
     return CompatFieldUpper(field);
   }
 
-  std::string SnakeToCamel(const std::string& value,
-                           bool upper_first) const {
+  std::string SnakeToCamel(const std::string& value, bool upper_first) const {
     std::string result;
     result.reserve(value.size());
     bool capitalize = upper_first;
@@ -1592,8 +1591,8 @@ class GoGenerator : public BaseGenerator {
       }
     }
     if (!upper_first && !result.empty()) {
-      result[0] = static_cast<char>(std::tolower(
-          static_cast<unsigned char>(result[0])));
+      result[0] = static_cast<char>(
+          std::tolower(static_cast<unsigned char>(result[0])));
     }
     return result;
   }

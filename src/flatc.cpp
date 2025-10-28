@@ -17,6 +17,7 @@
 #include "flatbuffers/flatc.h"
 
 #include <algorithm>
+#include <cstring>
 #include <limits>
 #include <list>
 #include <memory>
@@ -28,7 +29,6 @@
 #include "flatbuffers/code_generator.h"
 #include "flatbuffers/idl.h"
 #include "flatbuffers/util.h"
-#include <cstring>
 
 namespace flatbuffers {
 
@@ -262,7 +262,7 @@ const static FlatCOption flatc_options[] = {
      "Currently this is required to generate private types in Rust"},
     {"", "python-no-type-prefix-suffix", "",
      "Skip emission of Python functions that are prefixed with typenames"},
-    {"", "preserve-case", "", "Preserve all property cases as defined in IDL" },
+    {"", "preserve-case", "", "Preserve all property cases as defined in IDL"},
     {"", "python-typing", "", "Generate Python type annotations"},
     {"", "python-version", "", "Generate code for the given Python version."},
     {"", "python-decode-obj-api-strings", "",
@@ -769,19 +769,17 @@ FlatCOptions FlatCompiler::ParseFromCommandLineArguments(int argc,
           options.generators.push_back(code_generator_it->second);
           if (options.preserve_case) {
             static const std::set<std::string> preserve_case_supported = {
-              "dart", "cpp", "go", "php", "python", "ts", "jsonschema", "rust", "java"
-            };
+                "dart", "cpp",        "go",   "php", "python",
+                "ts",   "jsonschema", "rust", "java"};
             std::string matched_lang = arg;
             if (matched_lang.rfind("--", 0) == 0)
               matched_lang = matched_lang.substr(2);
             else if (matched_lang.rfind("-", 0) == 0)
               matched_lang = matched_lang.substr(1);
             static const std::map<std::string, std::string> short_to_lang = {
-              { "b", "binary" }, { "c", "cpp" }, { "n", "csharp" },
-              { "d", "dart" },   { "g", "go" },  { "j", "java" },
-              { "t", "json" },   { "l", "lua" }, { "p", "python" },
-              { "r", "rust" },   { "T", "ts" }
-            };
+                {"b", "binary"}, {"c", "cpp"},  {"n", "csharp"}, {"d", "dart"},
+                {"g", "go"},     {"j", "java"}, {"t", "json"},   {"l", "lua"},
+                {"p", "python"}, {"r", "rust"}, {"T", "ts"}};
             auto it_lang = short_to_lang.find(matched_lang);
             if (it_lang != short_to_lang.end()) matched_lang = it_lang->second;
             if (!preserve_case_supported.count(matched_lang)) {
@@ -822,7 +820,7 @@ FlatCOptions FlatCompiler::ParseFromCommandLineArguments(int argc,
   }
 
   ValidateOptions(options);
-  
+
   return options;
 }
 

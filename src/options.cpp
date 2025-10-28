@@ -2,7 +2,5 @@
 
 namespace flatbuffers {
 
-    FlatCOptions global_options;    
+FlatCOptions global_options;
 }
-
-    

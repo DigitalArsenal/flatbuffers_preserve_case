@@ -18,8 +18,8 @@
 #include "idl_gen_dart.h"
 
 #include <cassert>
-#include <cmath>
 #include <cctype>
+#include <cmath>
 
 #include "flatbuffers/code_generators.h"
 #include "flatbuffers/flatbuffers.h"
@@ -88,11 +88,10 @@ class DartGenerator : public BaseGenerator {
   DartGenerator(const Parser& parser, const std::string& path,
                 const std::string& file_name)
       : BaseGenerator(parser, path, file_name, "", ".", "dart"),
-       namer_(WithFlagOptions(DartDefaultConfig(), parser.opts, path),
+        namer_(WithFlagOptions(DartDefaultConfig(), parser.opts, path),
                DartKeywords()) {}
 
-  std::string SnakeToCamel(const std::string& value,
-                           bool upper_first) const {
+  std::string SnakeToCamel(const std::string& value, bool upper_first) const {
     if (value.find('_') == std::string::npos) {
       return value;
     }
@@ -113,8 +112,8 @@ class DartGenerator : public BaseGenerator {
       }
     }
     if (!upper_first && !result.empty()) {
-      result[0] = static_cast<char>(std::tolower(
-          static_cast<unsigned char>(result[0])));
+      result[0] = static_cast<char>(
+          std::tolower(static_cast<unsigned char>(result[0])));
     }
     return result;
   }
@@ -624,10 +623,10 @@ class DartGenerator : public BaseGenerator {
       code += "  " + type_name + " " + field_name + ";\n";
 
       if (NeedsCompat(field_name, compat_name)) {
-        code += "  " + type_name + " get " + compat_name +
-                " => " + field_name + ";\n";
-        code += "  set " + compat_name + "(" + type_name +
-                " value) => " + field_name + " = value;\n";
+        code += "  " + type_name + " get " + compat_name + " => " + field_name +
+                ";\n";
+        code += "  set " + compat_name + "(" + type_name + " value) => " +
+                field_name + " = value;\n";
       }
       const std::string type_suffix = "_type";
       if (field_name.size() > type_suffix.size() &&
@@ -638,10 +637,10 @@ class DartGenerator : public BaseGenerator {
             "Type";
         if (NeedsCompat(field_name, hybrid_alias) &&
             hybrid_alias != compat_name) {
-          code += "  " + type_name + " get " + hybrid_alias +
-                  " => " + field_name + ";\n";
-          code += "  set " + hybrid_alias + "(" + type_name +
-                  " value) => " + field_name + " = value;\n";
+          code += "  " + type_name + " get " + hybrid_alias + " => " +
+                  field_name + ";\n";
+          code += "  set " + hybrid_alias + "(" + type_name + " value) => " +
+                  field_name + " = value;\n";
         }
       }
 
@@ -834,8 +833,8 @@ class DartGenerator : public BaseGenerator {
       }
 
       if (NeedsCompat(field_name, compat_name)) {
-        code += "  " + type_name + " get " + compat_name +
-                " => " + field_name + ";\n";
+        code += "  " + type_name + " get " + compat_name + " => " + field_name +
+                ";\n";
       }
       const std::string type_suffix = "_type";
       if (field_name.size() > type_suffix.size() &&
@@ -846,8 +845,8 @@ class DartGenerator : public BaseGenerator {
             "Type";
         if (NeedsCompat(field_name, hybrid_alias) &&
             hybrid_alias != compat_name) {
-          code += "  " + type_name + " get " + hybrid_alias +
-                  " => " + field_name + ";\n";
+          code += "  " + type_name + " get " + hybrid_alias + " => " +
+                  field_name + ";\n";
         }
       }
     }
@@ -1073,21 +1072,21 @@ class DartGenerator : public BaseGenerator {
            it != non_deprecated_fields.end(); ++it) {
         const FieldDef& field = *it->second;
 
-      const std::string variable_name = namer_.Variable(field);
-      const std::string compat_variable = CompatFieldLower(field);
-      const bool needs_alias = NeedsCompat(variable_name, compat_variable);
-      const std::string type_expr =
-          GenDartTypeName(field.value.type, struct_def.defined_namespace,
-                          field, !struct_def.fixed, "ObjectBuilder");
+        const std::string variable_name = namer_.Variable(field);
+        const std::string compat_variable = CompatFieldLower(field);
+        const bool needs_alias = NeedsCompat(variable_name, compat_variable);
+        const std::string type_expr =
+            GenDartTypeName(field.value.type, struct_def.defined_namespace,
+                            field, !struct_def.fixed, "ObjectBuilder");
 
-      code += "    ";
-      if (struct_def.fixed && !needs_alias) code += "required ";
-      code += type_expr + " " + variable_name + ",\n";
-      if (needs_alias) {
-        std::string alias_type = type_expr;
-        if (alias_type.find('?') == std::string::npos) alias_type += "?";
-        code += "    " + alias_type + " " + compat_variable + ",\n";
-      }
+        code += "    ";
+        if (struct_def.fixed && !needs_alias) code += "required ";
+        code += type_expr + " " + variable_name + ",\n";
+        if (needs_alias) {
+          std::string alias_type = type_expr;
+          if (alias_type.find('?') == std::string::npos) alias_type += "?";
+          code += "    " + alias_type + " " + compat_variable + ",\n";
+        }
       }
       code += "  })\n";
       code += "      : ";

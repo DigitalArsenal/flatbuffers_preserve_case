@@ -182,8 +182,7 @@ int main(int argc, const char* argv[]) {
       flatbuffers::NewTsCodeGenerator());
 
   // Parse command-line arguments and assign to global_options
-  flatbuffers::global_options = 
-  flatc.ParseFromCommandLineArguments(argc, argv);
+  flatbuffers::global_options = flatc.ParseFromCommandLineArguments(argc, argv);
 
   // Compile with the extracted FlatC options.
   return flatc.Compile(flatbuffers::global_options);
