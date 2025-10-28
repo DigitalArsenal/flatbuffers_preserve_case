@@ -6,6 +6,6 @@ Preserve Case Test Coverage
 - Go: ✅ (tests run in `tests/GoTest.sh`)
 - PHP: ✅ (tests run in `tests/PHPTest.sh`)
 - Python: ✅ (tests run in `tests/PythonTest.sh`)
-- TypeScript: ❌
+- TypeScript: ✅ (default + preserve-case via `tests/TypeScriptTest.sh`)
 - JSON Schema: ❌
 - Rust: ✅ (preserve-case suites in `tests/rust_usage_test/tests/*_preserve_case.rs`)
