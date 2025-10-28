@@ -4,7 +4,7 @@ Preserve Case Test Coverage
 - C++: ✅ (covered by `tests/CppTest.sh`)
 - Dart: ✅ (default + preserve-case via `tests/DartTest.sh`)
 - Go: ✅ (tests run in `tests/GoTest.sh`)
-- PHP: ❌
+- PHP: ✅ (tests run in `tests/PHPTest.sh`)
 - Python: ✅ (tests run in `tests/PythonTest.sh`)
 - TypeScript: ❌
 - JSON Schema: ❌
