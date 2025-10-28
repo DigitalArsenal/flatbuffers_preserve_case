@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 script_dir="$(cd "$(dirname "$0")" && pwd)"
 repo_dir="$(cd "${script_dir}/.." && pwd)"

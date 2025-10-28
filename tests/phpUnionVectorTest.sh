@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eu
 
 preserve_case_flag="--preserve-case"
 output_dir="php_preserve_case"
