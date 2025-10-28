@@ -1,15 +1,24 @@
 <?php
 
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "Constants.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "ByteBuffer.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "FlatbufferBuilder.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "Table.php"));
-require join(DIRECTORY_SEPARATOR, array(dirname(dirname(__FILE__)), "php", "Struct.php"));
+$phpLibDir = dirname(dirname(__FILE__));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "Constants.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "ByteBuffer.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "FlatbufferBuilder.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "Table.php"));
+require join(DIRECTORY_SEPARATOR, array($phpLibDir, "php", "Struct.php"));
 
-require join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), "php", 'Attacker.php'));
-require join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), "php", 'BookReader.php'));
-require join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), "php", 'Character.php'));
-require join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), "php", 'Movie.php'));
+$unionGeneratedDir = getenv('PHP_UNION_GENERATED_DIR');
+if ($unionGeneratedDir === false || $unionGeneratedDir === '') {
+    $unionGeneratedDir = join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), "php"));
+}
+$unionGeneratedDir = rtrim($unionGeneratedDir, DIRECTORY_SEPARATOR);
+foreach (['Attacker.php', 'BookReader.php', 'Character.php', 'Movie.php'] as $file) {
+    $path = join(DIRECTORY_SEPARATOR, array($unionGeneratedDir, $file));
+    if (!file_exists($path)) {
+        throw new Exception("Required generated file not found: {$path}");
+    }
+    require $path;
+}
 
 class Assert {
     public function ok($result, $message = "") {
