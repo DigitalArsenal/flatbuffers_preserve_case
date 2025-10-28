@@ -448,10 +448,9 @@ bool ReadEnvironmentVariable(const char* var_name, std::string* _value) {
 
 std::string ConvertCase(const std::string& input, Case output_case,
                         Case input_case) {
-
   // If preserve-case is on, or the string is from the IDL names registry,
   // return as-is.
- 
+
   if (global_options.preserve_case && IsIdlName(input)) {
     return input;
   }

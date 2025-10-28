@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "flatbuffers/flatbuffers.h"
-
 #include "monster_test_generated.h"
 
 int main() {
@@ -11,15 +10,12 @@ int main() {
 
   auto stat_id = builder.CreateString("Sword");
   auto stat = MyGame::Example::CreateStat(builder, stat_id, 10, 0);
-  auto abilities = builder.CreateVector(
-      std::vector<uint8_t>{1, 2, 3, 4});
-  auto string_vector = builder.CreateVectorOfStrings(
-      std::vector<std::string>{"Alpha", "Beta"});
-  auto longs_vector = builder.CreateVector(
-      std::vector<int64_t>{11, 22, 33});
-  auto simple_table =
-      MyGame::Example::CreateTestSimpleTableWithEnum(
-          builder, MyGame::Example::Color_Red);
+  auto abilities = builder.CreateVector(std::vector<uint8_t>{1, 2, 3, 4});
+  auto string_vector =
+      builder.CreateVectorOfStrings(std::vector<std::string>{"Alpha", "Beta"});
+  auto longs_vector = builder.CreateVector(std::vector<int64_t>{11, 22, 33});
+  auto simple_table = MyGame::Example::CreateTestSimpleTableWithEnum(
+      builder, MyGame::Example::Color_Red);
 
   auto monster_name = builder.CreateString("PreserveCase");
   MyGame::Example::MonsterBuilder monster_builder(builder);
@@ -64,8 +60,7 @@ int main() {
   if (longs->Get(2) != 33) return 16;
   if (root->test_type() != MyGame::Example::Any_TestSimpleTableWithEnum)
     return 17;
-  auto union_table =
-      root->test_as_TestSimpleTableWithEnum();
+  auto union_table = root->test_as_TestSimpleTableWithEnum();
   if (union_table == nullptr ||
       union_table->color() != MyGame::Example::Color_Red)
     return 18;
@@ -76,12 +71,13 @@ int main() {
   if (unpacked->testempty == nullptr) return 21;
   if (unpacked->testempty->id != "Sword") return 22;
   if (!unpacked->testbool) return 23;
-  if (unpacked->inventory.size() != 4 ||
-      unpacked->inventory[1] != 2) return 24;
+  if (unpacked->inventory.size() != 4 || unpacked->inventory[1] != 2) return 24;
   if (unpacked->testarrayofstring.size() != 2 ||
-      unpacked->testarrayofstring[1] != "Beta") return 25;
+      unpacked->testarrayofstring[1] != "Beta")
+    return 25;
   if (unpacked->vector_of_longs.size() != 3 ||
-      unpacked->vector_of_longs[0] != 11) return 26;
+      unpacked->vector_of_longs[0] != 11)
+    return 26;
   if (unpacked->test.type != MyGame::Example::Any_TestSimpleTableWithEnum)
     return 27;
   if (unpacked->test.AsTestSimpleTableWithEnum()->color !=
@@ -89,10 +85,10 @@ int main() {
     return 28;
 
   flatbuffers::FlatBufferBuilder roundtrip;
-  roundtrip.Finish(
-      MyGame::Example::Monster::Pack(roundtrip, unpacked.get()),
-      MyGame::Example::MonsterIdentifier());
-  if (!MyGame::Example::MonsterBufferHasIdentifier(roundtrip.GetBufferPointer()))
+  roundtrip.Finish(MyGame::Example::Monster::Pack(roundtrip, unpacked.get()),
+                   MyGame::Example::MonsterIdentifier());
+  if (!MyGame::Example::MonsterBufferHasIdentifier(
+          roundtrip.GetBufferPointer()))
     return 29;
 
   return 0;
